@@ -1,0 +1,133 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3BucketLevel",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketPolicy",
+                "s3:PutBucketPolicy",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:GetBucketOwnershipControls",
+                "s3:PutBucketOwnershipControls"
+            ],
+            "Resource": "arn:aws:s3:::xavier-mckenzie-resume-2026"
+        },
+        {
+            "Sid": "S3ObjectLevel",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": "arn:aws:s3:::xavier-mckenzie-resume-2026/*"
+        },
+        {
+            "Sid": "CloudFrontManage",
+            "Effect": "Allow",
+            "Action": [
+                "cloudfront:CreateDistribution",
+                "cloudfront:GetDistribution",
+                "cloudfront:UpdateDistribution",
+                "cloudfront:DeleteDistribution",
+                "cloudfront:ListDistributions",
+                "cloudfront:CreateOriginAccessControl",
+                "cloudfront:GetOriginAccessControl",
+                "cloudfront:UpdateOriginAccessControl",
+                "cloudfront:ListOriginAccessControls",
+                "cloudfront:CreateInvalidation",
+                "cloudfront:GetInvalidation",
+                "cloudfront:ListInvalidations",
+                "cloudfront:TagResource",
+                "cloudfront:ListTagsForResource"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CallerIdentity",
+            "Effect": "Allow",
+            "Action": "sts:GetCallerIdentity",
+            "Resource": "*"
+        },
+        {
+            "Sid": "DynamoDBResumeTable",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:CreateTable",
+                "dynamodb:DeleteTable",
+                "dynamodb:DescribeTable",
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:ListTagsOfResource"
+            ],
+            "Resource": "arn:aws:dynamodb:us-east-1:123456789012:table/resume-visitor-count"
+        },
+        {
+            "Sid": "LambdaResumeFunctions",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:CreateFunction",
+                "lambda:GetFunction",
+                "lambda:UpdateFunctionCode",
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:DeleteFunction",
+                "lambda:InvokeFunction",
+                "lambda:AddPermission",
+                "lambda:RemovePermission",
+                "lambda:GetPolicy",
+                "lambda:TagResource"
+            ],
+            "Resource": "arn:aws:lambda:us-east-1:123456789012:function:resume-*"
+        },
+        {
+            "Sid": "LambdaListOnly",
+            "Effect": "Allow",
+            "Action": "lambda:ListFunctions",
+            "Resource": "*"
+        },
+        {
+            "Sid": "ApiGatewayManage",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:GET",
+                "apigateway:POST",
+                "apigateway:PUT",
+                "apigateway:PATCH",
+                "apigateway:DELETE"
+            ],
+            "Resource": "arn:aws:apigateway:us-east-1::/apis*"
+        },
+        {
+            "Sid": "LambdaExecutionRole",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:DeleteRole",
+                "iam:PutRolePolicy",
+                "iam:GetRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:PassRole"
+            ],
+            "Resource": "arn:aws:iam::123456789012:role/resume-lambda-role"
+        },
+        {
+            "Sid": "LambdaLogs",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:GetLogEvents",
+                "logs:DescribeLogStreams"
+            ],
+            "Resource": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/lambda/resume-*"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OS
+.DS_Store
+
+# Build artifacts
+lambda/function.zip
+lambda/__pycache__/
+*.pyc
+
+# Test/scratch output
+response.json
+
+# Env / secrets — never commit real credentials
+.env
+*.pem
