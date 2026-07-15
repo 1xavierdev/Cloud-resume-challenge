@@ -1,9 +1,5 @@
-resource "random_id" "bucket_suffix" {
-  byte_length = 4
-}
-
 resource "aws_s3_bucket" "resume" {
-  bucket = "${var.bucket_name_prefix}-${random_id.bucket_suffix.hex}"
+  bucket = var.bucket_name
 }
 
 # Bucket is fully private. The public never talks to S3 directly -- only

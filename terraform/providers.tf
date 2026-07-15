@@ -6,9 +6,9 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.6"
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.4"
     }
   }
 }
@@ -16,6 +16,8 @@ terraform {
 provider "aws" {
   region = var.aws_region
 }
+
+data "aws_caller_identity" "current" {}
 
 # NOTE: No custom domain yet, so we're using CloudFront's default
 # certificate (*.cloudfront.net). When a domain is added later, an ACM

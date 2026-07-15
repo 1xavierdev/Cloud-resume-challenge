@@ -4,8 +4,8 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "bucket_name_prefix" {
-  description = "Prefix for the S3 bucket name. A random hex suffix is appended for global uniqueness."
+variable "bucket_name" {
+  description = "S3 bucket name for the static site. Fixed (not randomized) to match the bucket created manually in Week 2."
   type        = string
-  default     = "xavier-mckenzie-resume"
+  default     = "xavier-mckenzie-resume-2026"
 }

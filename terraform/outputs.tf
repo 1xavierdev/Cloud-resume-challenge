@@ -10,3 +10,16 @@ output "cloudfront_domain_name" {
 output "cloudfront_distribution_id" {
   value = aws_cloudfront_distribution.resume.id
 }
+
+output "api_endpoint" {
+  value       = "${aws_apigatewayv2_api.visitor_api.api_endpoint}/count"
+  description = "Visitor counter API endpoint"
+}
+
+output "dynamodb_table_name" {
+  value = aws_dynamodb_table.visitor_count.name
+}
+
+output "lambda_function_name" {
+  value = aws_lambda_function.visitor_counter.function_name
+}
