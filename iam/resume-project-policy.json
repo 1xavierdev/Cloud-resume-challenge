@@ -164,9 +164,11 @@
                 "s3:PutBucketVersioning",
                 "s3:PutEncryptionConfiguration",
                 "s3:PutBucketPublicAccessBlock",
+                "s3:GetBucketPolicy",
                 "dynamodb:CreateTable",
                 "dynamodb:DeleteTable",
                 "dynamodb:TagResource",
+                "dynamodb:DescribeContinuousBackups",
                 "iam:CreateOpenIDConnectProvider",
                 "iam:GetOpenIDConnectProvider",
                 "iam:DeleteOpenIDConnectProvider",
@@ -178,6 +180,7 @@
                 "iam:PutRolePolicy",
                 "iam:GetRolePolicy",
                 "iam:DeleteRolePolicy",
+                "iam:ListRolePolicies",
                 "iam:TagRole"
             ],
             "Resource": [
