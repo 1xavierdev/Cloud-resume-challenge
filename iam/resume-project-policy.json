@@ -24,7 +24,8 @@
                 "s3:GetAccelerateConfiguration",
                 "s3:GetBucketLocation",
                 "s3:GetBucketNotification",
-                "s3:GetBucketVersioning"
+                "s3:GetBucketVersioning",
+                "s3:GetEncryptionConfiguration"
             ],
             "Resource": "arn:aws:s3:::xavier-mckenzie-resume-2026"
         },
