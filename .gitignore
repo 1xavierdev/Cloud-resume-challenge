@@ -16,6 +16,8 @@ override.tf.json
 # Build artifacts
 lambda/function.zip
 lambda/__pycache__/
+lambda/tests/__pycache__/
+.pytest_cache/
 *.pyc
 
 # Test/scratch output

@@ -20,6 +20,7 @@ Tracking my build of the [Cloud Resume Challenge](https://cloudresumechallenge.d
 - [x] Frontend JS calls the API and displays the live count
 - [x] Entire stack (S3, CloudFront, DynamoDB, Lambda, IAM role, API Gateway) imported into
       Terraform state — `terraform plan` reports zero drift from what's actually running
+- [x] Lambda unit tests (`lambda/tests/`, pytest + moto — mocks DynamoDB, no AWS calls made)
 - [ ] AWS Cloud Practitioner cert study started
 
 Built manually first (console/CLI), per the official challenge order, then reconciled into
@@ -38,7 +39,17 @@ project's specific resources (S3 bucket, CloudFront, DynamoDB table, Lambda func
 API Gateway, log group). Note: the copy of this file in git has its account ID scrubbed to the
 placeholder `123456789012` for public-repo hygiene — the live AWS policy uses the real account ID.
 
+## Tests
+
+`lambda/tests/` — pytest + moto (mocked DynamoDB, no real AWS calls). Run from `lambda/`:
+
+```
+pip install -r requirements-dev.txt
+python -m pytest tests/ -v
+```
+
 ## Next step
 
-Backend is fully live and Terraform-managed. Remaining challenge steps: tests, backend CI/CD
-(auto-deploy Lambda/Terraform on push), frontend CI/CD, and eventually a custom domain.
+Backend is fully live, Terraform-managed, and unit-tested. Remaining challenge steps: backend
+CI/CD (run tests + auto-deploy Lambda/Terraform on push), frontend CI/CD, and eventually a
+custom domain.
