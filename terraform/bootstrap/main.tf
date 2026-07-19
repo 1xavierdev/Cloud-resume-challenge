@@ -73,10 +73,12 @@ resource "aws_dynamodb_table" "tf_locks" {
 resource "aws_iam_openid_connect_provider" "github" {
   url             = "https://token.actions.githubusercontent.com"
   client_id_list  = ["sts.amazonaws.com"]
-  # AWS validates GitHub's cert chain against its own trust store rather
-  # than this thumbprint for well-known providers, but the resource still
-  # requires a value — this is GitHub's documented root CA thumbprint.
-  thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea"]
+  # AWS stopped validating this value against the provider's real cert
+  # chain in 2023 for OIDC providers that chain to a well-known trusted CA
+  # (GitHub's does — currently Let's Encrypt's ISRG Root X1) — it only
+  # enforces the field is 40 hex chars. This is a random valid placeholder,
+  # not GitHub's actual fingerprint (which changes as GitHub rotates CAs).
+  thumbprint_list = ["4a50a53795cd76016032887a9e07f307b8dc52b9"]
 }
 
 data "aws_iam_policy_document" "github_actions_trust" {
