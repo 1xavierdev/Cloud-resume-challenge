@@ -165,10 +165,12 @@
                 "s3:PutEncryptionConfiguration",
                 "s3:PutBucketPublicAccessBlock",
                 "s3:GetBucketPolicy",
+                "s3:GetBucketAcl",
                 "dynamodb:CreateTable",
                 "dynamodb:DeleteTable",
                 "dynamodb:TagResource",
                 "dynamodb:DescribeContinuousBackups",
+                "dynamodb:DescribeTimeToLive",
                 "iam:CreateOpenIDConnectProvider",
                 "iam:GetOpenIDConnectProvider",
                 "iam:DeleteOpenIDConnectProvider",
@@ -181,6 +183,7 @@
                 "iam:GetRolePolicy",
                 "iam:DeleteRolePolicy",
                 "iam:ListRolePolicies",
+                "iam:ListAttachedRolePolicies",
                 "iam:TagRole"
             ],
             "Resource": [
