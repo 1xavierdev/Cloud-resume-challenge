@@ -178,6 +178,7 @@
                 "s3:GetBucketOwnershipControls",
                 "s3:GetBucketLocation",
                 "s3:GetBucketNotification",
+                "s3:DeleteBucket",
                 "dynamodb:CreateTable",
                 "dynamodb:DeleteTable",
                 "dynamodb:TagResource",
@@ -197,6 +198,7 @@
                 "iam:DeleteRolePolicy",
                 "iam:ListRolePolicies",
                 "iam:ListAttachedRolePolicies",
+                "iam:ListInstanceProfilesForRole",
                 "iam:TagRole"
             ],
             "Resource": [
