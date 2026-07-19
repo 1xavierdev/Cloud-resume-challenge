@@ -11,6 +11,19 @@ terraform {
       version = "~> 2.4"
     }
   }
+
+  # Bucket/table created once by terraform/bootstrap (see that directory's
+  # README note) — CI runners are ephemeral and can't rely on a local
+  # terraform.tfstate file, so this has to exist before CI can plan/apply.
+  # Backend blocks can't reference variables, hence the literal names here
+  # matching terraform/bootstrap/variables.tf's defaults.
+  backend "s3" {
+    bucket         = "xavier-mckenzie-resume-2026-tfstate"
+    key            = "cloud-resume-challenge/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "resume-terraform-locks"
+    encrypt        = true
+  }
 }
 
 provider "aws" {

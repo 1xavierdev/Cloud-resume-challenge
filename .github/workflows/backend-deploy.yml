@@ -1,0 +1,74 @@
+name: Backend deploy
+
+# Only the main app stack (terraform/, excluding terraform/bootstrap) and the
+# Lambda source are in scope here. terraform/bootstrap is applied by hand,
+# not by this workflow — see terraform/bootstrap/main.tf for why.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lambda/**"
+      - "terraform/**"
+      - "!terraform/bootstrap/**"
+      - ".github/workflows/backend-deploy.yml"
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write # required to fetch the OIDC token from GitHub
+  contents: read
+
+jobs:
+  test:
+    name: Run Lambda unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        working-directory: lambda
+        run: pip install -r requirements-dev.txt
+
+      - name: Run pytest
+        working-directory: lambda
+        run: python -m pytest tests/ -v
+
+  deploy:
+    name: Terraform plan & apply
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_CI_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~> 1.9"
+
+      - name: Terraform fmt check
+        working-directory: terraform
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: terraform
+        run: terraform init
+
+      - name: Terraform validate
+        working-directory: terraform
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: terraform
+        run: terraform plan -out=tfplan
+
+      - name: Terraform apply
+        working-directory: terraform
+        run: terraform apply -auto-approve tfplan

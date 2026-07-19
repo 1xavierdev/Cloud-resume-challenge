@@ -128,6 +128,64 @@
                 "logs:DescribeLogStreams"
             ],
             "Resource": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/lambda/resume-*"
+        },
+        {
+            "Sid": "TerraformStateBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject",
+                "s3:PutObject",
+                "s3:GetBucketVersioning",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:GetEncryptionConfiguration"
+            ],
+            "Resource": [
+                "arn:aws:s3:::xavier-mckenzie-resume-2026-tfstate",
+                "arn:aws:s3:::xavier-mckenzie-resume-2026-tfstate/*"
+            ]
+        },
+        {
+            "Sid": "TerraformStateLock",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:DescribeTable"
+            ],
+            "Resource": "arn:aws:dynamodb:us-east-1:123456789012:table/resume-terraform-locks"
+        },
+        {
+            "Sid": "BootstrapStackManage",
+            "Effect": "Allow",
+            "Action": [
+                "s3:CreateBucket",
+                "s3:PutBucketVersioning",
+                "s3:PutEncryptionConfiguration",
+                "s3:PutBucketPublicAccessBlock",
+                "dynamodb:CreateTable",
+                "dynamodb:DeleteTable",
+                "dynamodb:TagResource",
+                "iam:CreateOpenIDConnectProvider",
+                "iam:GetOpenIDConnectProvider",
+                "iam:DeleteOpenIDConnectProvider",
+                "iam:TagOpenIDConnectProvider",
+                "iam:UpdateOpenIDConnectProviderThumbprint",
+                "iam:CreateRole",
+                "iam:GetRole",
+                "iam:DeleteRole",
+                "iam:PutRolePolicy",
+                "iam:GetRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:TagRole"
+            ],
+            "Resource": [
+                "arn:aws:s3:::xavier-mckenzie-resume-2026-tfstate",
+                "arn:aws:dynamodb:us-east-1:123456789012:table/resume-terraform-locks",
+                "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com",
+                "arn:aws:iam::123456789012:role/resume-cicd-role"
+            ]
         }
     ]
 }
