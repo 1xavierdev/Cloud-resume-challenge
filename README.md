@@ -23,8 +23,10 @@ Tracking my build of the [Cloud Resume Challenge](https://cloudresumechallenge.d
 - [x] Lambda unit tests (`lambda/tests/`, pytest + moto — mocks DynamoDB, no AWS calls made)
 - [x] Backend CI/CD (GitHub Actions, OIDC-authenticated, runs tests then `terraform plan`/`apply`
       on push to `main`)
-- [ ] Frontend CI/CD
+- [x] Frontend CI/CD (GitHub Actions, syncs `index.html`/`style.css`/`script.js` to S3 +
+      invalidates CloudFront on push, independent of the Terraform pipeline)
 - [ ] AWS Cloud Practitioner cert study started
+- [ ] Reflective write-up (the challenge's final step)
 
 Built manually first (console/CLI), per the official challenge order, then reconciled into
 Terraform as a retroactive IaC pass. The `xavier-cli` IAM user itself and its `resume-project-policy`
@@ -89,8 +91,22 @@ in sync with whatever `resume-project-policy.json` accumulates — they're separ
 separate identities (human vs. pipeline) covering the same resources, so a permission added to one
 doesn't automatically apply to the other.
 
+## Frontend CI/CD
+
+`.github/workflows/frontend-deploy.yml` syncs `index.html`/`style.css`/`script.js` to S3 and
+invalidates CloudFront on every push to `main` that touches those files. Deliberately separate
+from `backend-deploy.yml` and its Terraform plan/apply cycle — content changes shouldn't need a
+full infra plan, and vice versa. Uses the same `resume-cicd-role` OIDC identity as the backend
+pipeline; needed no new IAM permissions since that role already covered S3 object writes and
+CloudFront invalidation from the backend work.
+
+Site content used to be uploaded by `terraform apply` itself (see git history on `terraform/site.tf`
+— `aws_s3_object` resources keyed on a file hash). Removed via `terraform state rm` (not destroy)
+once this workflow replaced it, so the two mechanisms don't fight over the same S3 keys.
+
 ## Next step
 
-Backend is fully live, Terraform-managed, unit-tested, and auto-deploys via CI/CD on push to
-`main`. Next: frontend CI/CD (sync `index.html`/`script.js`/`style.css` to S3, invalidate
-CloudFront), eventually a custom domain.
+Both backend and frontend are fully live, Terraform-managed, tested, and auto-deploy via CI/CD.
+Remaining challenge items: a custom domain (currently deliberately skipped for cost — this is
+normally a required step, worth revisiting before treating this as finished portfolio material),
+AWS Cloud Practitioner cert study, and the reflective write-up the challenge asks for at the end.
