@@ -222,7 +222,8 @@
                 "iam:ListRolePolicies",
                 "iam:ListAttachedRolePolicies",
                 "iam:ListInstanceProfilesForRole",
-                "iam:TagRole"
+                "iam:TagRole",
+                "iam:UpdateAssumeRolePolicy"
             ],
             "Resource": [
                 "arn:aws:s3:::xavier-mckenzie-resume-2026-tfstate",

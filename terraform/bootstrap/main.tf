@@ -101,10 +101,20 @@ data "aws_iam_policy_document" "github_actions_trust" {
     # token that satisfies this, and this repo doesn't run terraform apply
     # anywhere else. Widen with an extra condition value if PR-preview plans
     # get added later.
+    #
+    # Format includes GitHub's immutable owner/repo IDs (see github_owner_id
+    # / github_repo_id in variables.tf) — NOT just "repo:OWNER/REPO:ref:...".
+    # An earlier version of this trust policy used the name-only format,
+    # which looked right by every convention but silently never matched any
+    # real token GitHub issued, causing AssumeRoleWithWebIdentity to fail
+    # with a generic AccessDenied that gave no hint the condition itself was
+    # the problem. Confirmed by decoding an actual token during
+    # troubleshooting — don't revert to the name-only format without
+    # re-checking a live token first.
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repo}:ref:refs/heads/main"]
+      values   = ["repo:${split("/", var.github_repo)[0]}@${var.github_owner_id}/${split("/", var.github_repo)[1]}@${var.github_repo_id}:ref:refs/heads/main"]
     }
   }
 }
