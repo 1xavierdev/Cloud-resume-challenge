@@ -21,10 +21,10 @@ resource "aws_cloudfront_distribution" "resume" {
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
-    cached_methods          = ["GET", "HEAD"]
-    target_origin_id        = "s3-resume-origin"
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "s3-resume-origin"
     viewer_protocol_policy = "redirect-to-https"
-    compress                = true
+    compress               = true
 
     # AWS-managed "CachingOptimized" policy -- standard choice for static sites.
     cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"

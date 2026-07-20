@@ -71,8 +71,8 @@ resource "aws_dynamodb_table" "tf_locks" {
 # --- GitHub OIDC identity for CI ------------------------------------------
 
 resource "aws_iam_openid_connect_provider" "github" {
-  url             = "https://token.actions.githubusercontent.com"
-  client_id_list  = ["sts.amazonaws.com"]
+  url            = "https://token.actions.githubusercontent.com"
+  client_id_list = ["sts.amazonaws.com"]
   # AWS stopped validating this value against the provider's real cert
   # chain in 2023 for OIDC providers that chain to a well-known trusted CA
   # (GitHub's does — currently Let's Encrypt's ISRG Root X1) — it only
