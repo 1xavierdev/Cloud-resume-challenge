@@ -22,6 +22,9 @@ lambda/tests/__pycache__/
 
 # Test/scratch output
 response.json
+policy.json
+policy-new.json
+policy-check.json
 
 # Env / secrets — never commit real credentials
 .env
