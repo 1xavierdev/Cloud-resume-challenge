@@ -1,0 +1,47 @@
+name: Frontend deploy
+
+# Site content (index.html/style.css/script.js) used to be uploaded by
+# `terraform apply` (see the now-removed aws_s3_object resources this repo's
+# history has in terraform/site.tf) — that was always a stopgap. This
+# workflow replaces it: syncs the static files straight to S3 and
+# invalidates CloudFront, independent of the infra pipeline in
+# backend-deploy.yml. Terraform no longer tracks these S3 objects at all
+# (removed via `terraform state rm`, not destroy — the live files were never
+# touched) specifically so the two deploy mechanisms can't fight over the
+# same keys.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "style.css"
+      - "script.js"
+      - ".github/workflows/frontend-deploy.yml"
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write # required to fetch the OIDC token from GitHub
+  contents: read
+
+jobs:
+  deploy:
+    name: Sync to S3 and invalidate CloudFront
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_CI_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Sync site files to S3
+        run: |
+          aws s3 cp index.html s3://xavier-mckenzie-resume-2026/index.html --content-type text/html
+          aws s3 cp style.css s3://xavier-mckenzie-resume-2026/style.css --content-type text/css
+          aws s3 cp script.js s3://xavier-mckenzie-resume-2026/script.js --content-type application/javascript
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id E73WN659MK4UQ --paths "/index.html" "/style.css" "/script.js"
