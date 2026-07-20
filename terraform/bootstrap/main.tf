@@ -137,6 +137,9 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "s3:ListBucket",
       "s3:GetObject",
       "s3:PutObject",
+      "s3:GetBucketVersioning",
+      "s3:GetBucketPublicAccessBlock",
+      "s3:GetEncryptionConfiguration",
     ]
     resources = [
       aws_s3_bucket.tfstate.arn,
@@ -151,6 +154,7 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "dynamodb:GetItem",
       "dynamodb:PutItem",
       "dynamodb:DeleteItem",
+      "dynamodb:DescribeTable",
     ]
     resources = [aws_dynamodb_table.tf_locks.arn]
   }
@@ -166,6 +170,20 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "s3:PutBucketPublicAccessBlock",
       "s3:GetBucketOwnershipControls",
       "s3:PutBucketOwnershipControls",
+      "s3:GetBucketAcl",
+      "s3:GetBucketCORS",
+      "s3:GetBucketWebsite",
+      "s3:GetBucketLogging",
+      "s3:GetLifecycleConfiguration",
+      "s3:GetReplicationConfiguration",
+      "s3:GetBucketRequestPayment",
+      "s3:GetBucketTagging",
+      "s3:GetBucketObjectLockConfiguration",
+      "s3:GetAccelerateConfiguration",
+      "s3:GetBucketLocation",
+      "s3:GetBucketNotification",
+      "s3:GetBucketVersioning",
+      "s3:GetEncryptionConfiguration",
     ]
     resources = ["arn:aws:s3:::${var.site_bucket_name}"]
   }
@@ -177,6 +195,7 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "s3:GetObject",
       "s3:PutObject",
       "s3:DeleteObject",
+      "s3:GetObjectTagging",
     ]
     resources = ["arn:aws:s3:::${var.site_bucket_name}/*"]
   }
@@ -221,6 +240,8 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "dynamodb:PutItem",
       "dynamodb:UpdateItem",
       "dynamodb:ListTagsOfResource",
+      "dynamodb:DescribeContinuousBackups",
+      "dynamodb:DescribeTimeToLive",
     ]
     resources = ["arn:aws:dynamodb:${var.aws_region}:${data.aws_caller_identity.current.account_id}:table/resume-visitor-count"]
   }
@@ -246,6 +267,10 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "lambda:RemovePermission",
       "lambda:GetPolicy",
       "lambda:TagResource",
+      "lambda:ListVersionsByFunction",
+      "lambda:GetFunctionCodeSigningConfig",
+      "lambda:GetFunctionEventInvokeConfig",
+      "lambda:ListTags",
     ]
     resources = ["arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:resume-*"]
   }
@@ -276,6 +301,8 @@ data "aws_iam_policy_document" "github_actions_ci" {
       "iam:AttachRolePolicy",
       "iam:DetachRolePolicy",
       "iam:PassRole",
+      "iam:ListRolePolicies",
+      "iam:ListAttachedRolePolicies",
     ]
     resources = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/resume-lambda-role"]
   }
